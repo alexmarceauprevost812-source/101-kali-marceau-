@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kali Linux — Aide-mémoire des commandes</title>
+  <meta name="description" content="Aide-mémoire des principaux outils et commandes de Kali Linux pour le pentest éthique et autorisé." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <span class="logo">🐉</span>
+        <div>
+          <h1>Kali Linux — Aide-mémoire</h1>
+          <p class="tagline">Commandes &amp; outils pour un pentest propre et autorisé</p>
+        </div>
+      </div>
+      <label class="theme-toggle">
+        <input type="checkbox" id="themeToggle" />
+        <span>🌙 / ☀️</span>
+      </label>
+    </div>
+  </header>
+
+  <div class="legal-banner" role="note">
+    ⚠️ <strong>Usage légal uniquement.</strong> N'utilisez ces outils que sur des systèmes que vous
+    possédez ou pour lesquels vous avez une <strong>autorisation écrite explicite</strong>.
+    Le test d'intrusion non autorisé est illégal dans la plupart des pays.
+  </div>
+
+  <main class="wrap">
+    <section class="controls">
+      <input type="search" id="search" placeholder="🔎 Rechercher une commande, un outil, une tâche…" autocomplete="off" />
+      <div id="chips" class="chips"></div>
+      <p id="count" class="count"></p>
+    </section>
+
+    <section id="cards" class="cards"></section>
+
+    <p id="empty" class="empty" hidden>Aucun résultat. Essayez un autre mot-clé.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Aide-mémoire éducatif — pentest éthique. Vérifiez toujours les options avec <code>man &lt;outil&gt;</code> ou <code>&lt;outil&gt; --help</code>.</p>
+      <p class="muted">Les commandes sont des exemples ; adaptez cibles et paramètres à votre périmètre autorisé.</p>
+    </div>
+  </footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
