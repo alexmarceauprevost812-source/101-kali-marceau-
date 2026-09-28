@@ -5,6 +5,36 @@
 # ================================================
 
 
+# === 💿 Installer Kali Linux (officiel) — Télécharger et installer le vrai Kali sur un ordinateur ===
+
+# Site officiel : Télécharger l'ISO officielle (source sûre)
+https://www.kali.org/get-kali/
+
+# Documentation : Guide d'installation officiel
+https://www.kali.org/docs/installation/
+
+# sha256sum : Vérifier l'intégrité de l'ISO téléchargée
+sha256sum kali-linux-*.iso
+
+# lsblk : Identifier la clé USB (ex. /dev/sdb)
+lsblk
+
+# dd : Créer une clé USB bootable (Linux/macOS)
+sudo dd if=kali-linux-*.iso of=/dev/sdX bs=4M status=progress && sync
+
+# balenaEtcher : Créer une clé USB (Windows/graphique)
+https://etcher.balena.io/
+
+# Kali sur WSL : Installer Kali sous Windows (WSL)
+wsl --install -d kali-linux
+
+# kali-linux-default : Installer le métapaquet d'outils par défaut
+sudo apt install -y kali-linux-default
+
+# kali-linux-large : Installer un large panel d'outils
+sudo apt install -y kali-linux-large
+
+
 # === 🐧 Système & bases Kali — Mise à jour, gestion des paquets, services ===
 
 # apt update : Mettre à jour la liste des paquets
@@ -540,3 +570,132 @@ volatility -f dump.raw imageinfo
 
 # zsteg : Détecter la stégano dans un PNG/BMP
 zsteg image.png
+
+
+# === 📱 Mobile & Android — Analyse d'applications APK (tests autorisés) ===
+
+# adb devices : Lister les appareils connectés
+adb devices
+
+# adb install : Installer un APK
+adb install app.apk
+
+# adb shell : Ouvrir un shell sur l'appareil
+adb shell
+
+# adb pull : Extraire un fichier de l'appareil
+adb pull /data/local/tmp/fichier
+
+# apktool : Décompiler/recompiler un APK
+apktool d app.apk -o sortie/
+
+# apktool : Reconstruire un APK
+apktool b sortie/ -o modifie.apk
+
+# jadx : Décompiler un APK en Java (GUI)
+jadx-gui app.apk
+
+# jadx : Décompiler en ligne de commande
+jadx -d sortie/ app.apk
+
+# d2j-dex2jar : Convertir un APK en .jar
+d2j-dex2jar app.apk -o app.jar
+
+# keytool : Générer une clé de signature
+keytool -genkey -v -keystore ma.keystore -alias cle -keyalg RSA -keysize 2048 -validity 10000
+
+# apksigner : Signer un APK modifié
+apksigner sign --ks ma.keystore modifie.apk
+
+# frida : Instrumentation dynamique
+frida -U -f com.exemple.app -l script.js
+
+# objection : Exploration runtime mobile
+objection -g com.exemple.app explore
+
+# MobSF : Analyse statique/dynamique d'apps
+docker run -it -p 8000:8000 opensecurity/mobile-security-framework-mobsf
+
+
+# === 🐳 Docker & conteneurs — Inspection et sécurité des conteneurs (autorisé) ===
+
+# docker ps : Lister les conteneurs en cours
+docker ps -a
+
+# docker images : Lister les images locales
+docker images
+
+# docker exec : Ouvrir un shell dans un conteneur
+docker exec -it <conteneur> /bin/bash
+
+# docker inspect : Détails d'un conteneur/image
+docker inspect <conteneur>
+
+# docker logs : Voir les logs d'un conteneur
+docker logs <conteneur>
+
+# docker save : Exporter une image pour analyse
+docker save <image> -o image.tar
+
+# dive : Explorer les couches d'une image
+dive <image>
+
+# trivy : Scanner de vulnérabilités d'image
+trivy image <image>
+
+# trivy fs : Scanner un système de fichiers
+trivy fs .
+
+# grype : Scanner de vulnérabilités conteneur
+grype <image>
+
+# docker-bench : Audit de sécurité Docker (CIS)
+docker run --rm --net host --pid host --cap-add audit_control -v /var/run/docker.sock:/var/run/docker.sock docker/docker-bench-security
+
+# deepce : Énumération d'évasion de conteneur
+./deepce.sh
+
+# mount check : Vérifier si dans un conteneur
+cat /proc/1/cgroup | grep -i docker
+
+
+# === ☁️ Cloud (AWS / Azure / GCP) — Audit d'environnements cloud (comptes autorisés) ===
+
+# aws sts : Vérifier l'identité AWS courante
+aws sts get-caller-identity
+
+# aws s3 ls : Lister les buckets S3
+aws s3 ls
+
+# aws s3 : Lister le contenu d'un bucket
+aws s3 ls s3://<bucket> --recursive
+
+# aws iam : Lister les utilisateurs IAM
+aws iam list-users
+
+# scoutsuite : Audit de posture multi-cloud
+scout aws
+
+# prowler : Audit de sécurité AWS (CIS)
+prowler aws
+
+# pacu : Framework d'exploitation AWS
+pacu
+
+# cloud_enum : Énumérer ressources cloud publiques
+cloud_enum -k <mot-clé>
+
+# s3scanner : Chercher des buckets S3 exposés
+s3scanner scan --bucket <nom>
+
+# az login : Se connecter à Azure
+az login
+
+# az account : Lister les abonnements Azure
+az account list -o table
+
+# gcloud auth : S'authentifier sur GCP
+gcloud auth login
+
+# gcloud projects : Lister les projets GCP
+gcloud projects list

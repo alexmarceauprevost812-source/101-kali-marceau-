@@ -2,6 +2,22 @@
 // Chaque entrée : { tool, desc, cmd }
 window.KALI_DATA = [
   {
+    cat: "Installer Kali Linux (officiel)",
+    icon: "💿",
+    desc: "Télécharger et installer le vrai Kali sur un ordinateur",
+    items: [
+      { tool: "Site officiel", desc: "Télécharger l'ISO officielle (source sûre)", cmd: "https://www.kali.org/get-kali/" },
+      { tool: "Documentation", desc: "Guide d'installation officiel", cmd: "https://www.kali.org/docs/installation/" },
+      { tool: "sha256sum", desc: "Vérifier l'intégrité de l'ISO téléchargée", cmd: "sha256sum kali-linux-*.iso" },
+      { tool: "lsblk", desc: "Identifier la clé USB (ex. /dev/sdb)", cmd: "lsblk" },
+      { tool: "dd", desc: "Créer une clé USB bootable (Linux/macOS)", cmd: "sudo dd if=kali-linux-*.iso of=/dev/sdX bs=4M status=progress && sync" },
+      { tool: "balenaEtcher", desc: "Créer une clé USB (Windows/graphique)", cmd: "https://etcher.balena.io/" },
+      { tool: "Kali sur WSL", desc: "Installer Kali sous Windows (WSL)", cmd: "wsl --install -d kali-linux" },
+      { tool: "kali-linux-default", desc: "Installer le métapaquet d'outils par défaut", cmd: "sudo apt install -y kali-linux-default" },
+      { tool: "kali-linux-large", desc: "Installer un large panel d'outils", cmd: "sudo apt install -y kali-linux-large" }
+    ]
+  },
+  {
     cat: "Système & bases Kali",
     icon: "🐧",
     desc: "Mise à jour, gestion des paquets, services",
@@ -274,6 +290,67 @@ window.KALI_DATA = [
       { tool: "file", desc: "Identifier un type de fichier", cmd: "file fichier" },
       { tool: "volatility", desc: "Analyse de dump mémoire", cmd: "volatility -f dump.raw imageinfo" },
       { tool: "zsteg", desc: "Détecter la stégano dans un PNG/BMP", cmd: "zsteg image.png" }
+    ]
+  },
+  {
+    cat: "Mobile & Android",
+    icon: "📱",
+    desc: "Analyse d'applications APK (tests autorisés)",
+    items: [
+      { tool: "adb devices", desc: "Lister les appareils connectés", cmd: "adb devices" },
+      { tool: "adb install", desc: "Installer un APK", cmd: "adb install app.apk" },
+      { tool: "adb shell", desc: "Ouvrir un shell sur l'appareil", cmd: "adb shell" },
+      { tool: "adb pull", desc: "Extraire un fichier de l'appareil", cmd: "adb pull /data/local/tmp/fichier" },
+      { tool: "apktool", desc: "Décompiler/recompiler un APK", cmd: "apktool d app.apk -o sortie/" },
+      { tool: "apktool", desc: "Reconstruire un APK", cmd: "apktool b sortie/ -o modifie.apk" },
+      { tool: "jadx", desc: "Décompiler un APK en Java (GUI)", cmd: "jadx-gui app.apk" },
+      { tool: "jadx", desc: "Décompiler en ligne de commande", cmd: "jadx -d sortie/ app.apk" },
+      { tool: "d2j-dex2jar", desc: "Convertir un APK en .jar", cmd: "d2j-dex2jar app.apk -o app.jar" },
+      { tool: "keytool", desc: "Générer une clé de signature", cmd: "keytool -genkey -v -keystore ma.keystore -alias cle -keyalg RSA -keysize 2048 -validity 10000" },
+      { tool: "apksigner", desc: "Signer un APK modifié", cmd: "apksigner sign --ks ma.keystore modifie.apk" },
+      { tool: "frida", desc: "Instrumentation dynamique", cmd: "frida -U -f com.exemple.app -l script.js" },
+      { tool: "objection", desc: "Exploration runtime mobile", cmd: "objection -g com.exemple.app explore" },
+      { tool: "MobSF", desc: "Analyse statique/dynamique d'apps", cmd: "docker run -it -p 8000:8000 opensecurity/mobile-security-framework-mobsf" }
+    ]
+  },
+  {
+    cat: "Docker & conteneurs",
+    icon: "🐳",
+    desc: "Inspection et sécurité des conteneurs (autorisé)",
+    items: [
+      { tool: "docker ps", desc: "Lister les conteneurs en cours", cmd: "docker ps -a" },
+      { tool: "docker images", desc: "Lister les images locales", cmd: "docker images" },
+      { tool: "docker exec", desc: "Ouvrir un shell dans un conteneur", cmd: "docker exec -it <conteneur> /bin/bash" },
+      { tool: "docker inspect", desc: "Détails d'un conteneur/image", cmd: "docker inspect <conteneur>" },
+      { tool: "docker logs", desc: "Voir les logs d'un conteneur", cmd: "docker logs <conteneur>" },
+      { tool: "docker save", desc: "Exporter une image pour analyse", cmd: "docker save <image> -o image.tar" },
+      { tool: "dive", desc: "Explorer les couches d'une image", cmd: "dive <image>" },
+      { tool: "trivy", desc: "Scanner de vulnérabilités d'image", cmd: "trivy image <image>" },
+      { tool: "trivy fs", desc: "Scanner un système de fichiers", cmd: "trivy fs ." },
+      { tool: "grype", desc: "Scanner de vulnérabilités conteneur", cmd: "grype <image>" },
+      { tool: "docker-bench", desc: "Audit de sécurité Docker (CIS)", cmd: "docker run --rm --net host --pid host --cap-add audit_control -v /var/run/docker.sock:/var/run/docker.sock docker/docker-bench-security" },
+      { tool: "deepce", desc: "Énumération d'évasion de conteneur", cmd: "./deepce.sh" },
+      { tool: "mount check", desc: "Vérifier si dans un conteneur", cmd: "cat /proc/1/cgroup | grep -i docker" }
+    ]
+  },
+  {
+    cat: "Cloud (AWS / Azure / GCP)",
+    icon: "☁️",
+    desc: "Audit d'environnements cloud (comptes autorisés)",
+    items: [
+      { tool: "aws sts", desc: "Vérifier l'identité AWS courante", cmd: "aws sts get-caller-identity" },
+      { tool: "aws s3 ls", desc: "Lister les buckets S3", cmd: "aws s3 ls" },
+      { tool: "aws s3", desc: "Lister le contenu d'un bucket", cmd: "aws s3 ls s3://<bucket> --recursive" },
+      { tool: "aws iam", desc: "Lister les utilisateurs IAM", cmd: "aws iam list-users" },
+      { tool: "scoutsuite", desc: "Audit de posture multi-cloud", cmd: "scout aws" },
+      { tool: "prowler", desc: "Audit de sécurité AWS (CIS)", cmd: "prowler aws" },
+      { tool: "pacu", desc: "Framework d'exploitation AWS", cmd: "pacu" },
+      { tool: "cloud_enum", desc: "Énumérer ressources cloud publiques", cmd: "cloud_enum -k <mot-clé>" },
+      { tool: "s3scanner", desc: "Chercher des buckets S3 exposés", cmd: "s3scanner scan --bucket <nom>" },
+      { tool: "az login", desc: "Se connecter à Azure", cmd: "az login" },
+      { tool: "az account", desc: "Lister les abonnements Azure", cmd: "az account list -o table" },
+      { tool: "gcloud auth", desc: "S'authentifier sur GCP", cmd: "gcloud auth login" },
+      { tool: "gcloud projects", desc: "Lister les projets GCP", cmd: "gcloud projects list" }
     ]
   }
 ];
