@@ -14,18 +14,32 @@ xdg-open index.html   # Linux
 
 ## Contenu
 
-- Recherche instantanée par outil, tâche ou commande
-- Filtres par catégorie (recon, scan, web, mots de passe, Wi-Fi, forensics…)
-- Bouton « Copier » sur chaque commande
-- Thème clair / sombre
+Deux vues :
+
+- **⭐ Aide-mémoire** — commandes essentielles triées à la main par catégorie.
+- **📚 Tous les outils (820)** — catalogue complet des outils Kali, importé du
+  dépôt officiel `kali-tools` et classé par catégorie officielle
+  (métapaquets `kali-tools-*`). Chaque outil affiche sa description, sa
+  commande d'installation et ses commandes (binaires).
+
+Fonctionnalités :
+
+- Recherche instantanée par outil, tâche ou commande (dans les deux vues)
+- Filtres par catégorie
+- Bouton « Copier » sur chaque commande + « Tout copier »
+- Fichiers `.txt` téléchargeables (aide-mémoire et catalogue complet)
+- Thème nuit (noir) / jour (gris mat), commandes en orange
 
 ## Structure
 
 ```
-index.html        Page principale
-assets/style.css  Styles
-assets/data.js    Données des commandes (catégories + exemples)
-assets/app.js     Recherche, filtres, copie, thème
+index.html         Page principale
+assets/style.css   Styles
+assets/data.js     Aide-mémoire (commandes triées à la main)
+assets/catalog.js  Catalogue complet (820 outils, source kali-tools)
+assets/app.js      Recherche, filtres, copie, bascule de vue, thème
+commandes.txt      Aide-mémoire au format texte
+outils-kali.txt    Catalogue complet au format texte
 ```
 
 ## ⚠️ Avertissement légal

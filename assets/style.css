@@ -70,6 +70,21 @@ body {
 }
 
 .controls { padding: 28px 0 10px; }
+.views { display: flex; gap: 8px; margin-bottom: 16px; }
+.view-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: .95rem;
+  font-weight: 600;
+  transition: .15s;
+}
+.view-btn:hover { color: var(--text); border-color: var(--accent); }
+.view-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 #search {
   width: 100%;
   padding: 14px 16px;
@@ -171,6 +186,20 @@ body {
 }
 .copy-btn:hover { color: var(--text); border-color: var(--accent-2); }
 .copy-btn.copied { color: var(--accent); border-color: var(--accent); }
+
+/* Catalogue — binaires par outil */
+.bins { margin-top: 8px; }
+.bins summary {
+  cursor: pointer;
+  color: var(--accent-2);
+  font-size: .82rem;
+  padding: 4px 0;
+  user-select: none;
+}
+.bins summary:hover { color: var(--accent); }
+.bin { margin-top: 8px; }
+.bin-desc { color: var(--muted); font-size: .85rem; }
+.bins .cmd-code { margin-top: 4px; }
 
 .empty { text-align: center; color: var(--muted); padding: 40px 0; }
 

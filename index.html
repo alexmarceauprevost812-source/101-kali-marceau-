@@ -32,11 +32,16 @@
 
   <main class="wrap">
     <section class="controls">
+      <div class="views">
+        <button id="viewCheat" class="view-btn active">⭐ Aide-mémoire</button>
+        <button id="viewCatalog" class="view-btn">📚 Tous les outils (820)</button>
+      </div>
       <input type="search" id="search" placeholder="🔎 Rechercher une commande, un outil, une tâche…" autocomplete="off" />
       <div id="chips" class="chips"></div>
       <div class="actions">
         <button id="copyAll" class="action-btn">📋 Tout copier</button>
-        <a href="commandes.txt" download class="action-btn">⬇️ Télécharger .txt</a>
+        <a href="commandes.txt" download class="action-btn">⬇️ Aide-mémoire .txt</a>
+        <a href="outils-kali.txt" download class="action-btn">⬇️ Catalogue 820 outils .txt</a>
         <span id="count" class="count"></span>
       </div>
     </section>
@@ -54,6 +59,7 @@
   </footer>
 
   <script src="assets/data.js"></script>
+  <script src="assets/catalog.js"></script>
   <script src="assets/app.js"></script>
 </body>
 </html>
