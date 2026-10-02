@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hacking 101 — Cours complet</title>
+  <meta name="description" content="Cours complet de hacking éthique, chapitre par chapitre : de l'installation de Kali au rapport final, avec les commandes à copier." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <span class="logo">🎓</span>
+        <div>
+          <h1>Hacking 101 — Cours complet</h1>
+          <p class="tagline">Chapitre par chapitre : quoi faire, et quelle commande taper</p>
+        </div>
+      </div>
+      <div class="nav">
+        <a href="index.html" class="nav-link">📋 Aide-mémoire</a>
+        <label class="theme-toggle">
+          <input type="checkbox" id="themeToggle" />
+          <span>🌙 / ☀️</span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <div class="legal-banner" role="note">
+    ⚠️ <strong>Usage légal uniquement.</strong> Hacking <strong>éthique</strong> : tu ne testes que
+    tes propres machines, ton labo, ou un système avec <strong>autorisation écrite</strong>.
+    Entraîne-toi sur des cibles prévues pour ça (Metasploitable, TryHackMe, HackTheBox).
+    Sans permission, c'est un <strong>délit</strong>.
+  </div>
+
+  <main class="wrap course">
+
+    <!-- Sommaire -->
+    <nav class="toc">
+      <strong>📚 Sommaire du cours</strong>
+      <ol>
+        <li><a href="#ch0">Chap. 0 — L'éthique et la loi</a></li>
+        <li><a href="#ch1">Chap. 1 — Installer Kali &amp; monter son labo</a></li>
+        <li><a href="#ch2">Chap. 2 — Survivre dans le terminal Linux</a></li>
+        <li><a href="#ch3">Chap. 3 — Lire une commande &amp; remplacer <code>(cible)</code></a></li>
+        <li><a href="#ch4">Chap. 4 — Reconnaissance passive (OSINT)</a></li>
+        <li><a href="#ch5">Chap. 5 — Découverte réseau : scanner les alentours</a></li>
+        <li><a href="#ch6">Chap. 6 — Scanner les ports &amp; services</a></li>
+        <li><a href="#ch7">Chap. 7 — Énumérer les services</a></li>
+        <li><a href="#ch8">Chap. 8 — Analyse de vulnérabilités</a></li>
+        <li><a href="#ch9">Chap. 9 — Attaques sur les mots de passe</a></li>
+        <li><a href="#ch10">Chap. 10 — Exploitation (Metasploit)</a></li>
+        <li><a href="#ch11">Chap. 11 — Post-exploitation &amp; élévation de privilèges</a></li>
+        <li><a href="#ch12">Chap. 12 — Attaquer une application web</a></li>
+        <li><a href="#ch13">Chap. 13 — Audit Wi-Fi</a></li>
+        <li><a href="#ch14">Chap. 14 — Nettoyage &amp; rapport</a></li>
+        <li><a href="#ch15">Chap. 15 — Progresser ensuite</a></li>
+      </ol>
+    </nav>
+
+    <!-- CHAP 0 -->
+    <section id="ch0" class="lesson">
+      <div class="chap">CHAPITRE 0</div>
+      <h2>L'éthique et la loi</h2>
+      <p class="goal">🎯 Objectif : comprendre ce qui sépare un pentester d'un délinquant.</p>
+      <p>Un hacker éthique utilise les mêmes outils qu'un attaquant, mais <strong>avec permission</strong>
+      et pour <strong>corriger</strong> les failles. La différence légale tient en un mot : l'<strong>autorisation</strong>.</p>
+      <ul class="check">
+        <li>✅ Tes machines, tes VM, tes box d'entraînement.</li>
+        <li>✅ Un client qui a signé un périmètre (« scope »).</li>
+        <li>❌ Un site, un Wi-Fi ou une entreprise au hasard.</li>
+      </ul>
+      <div class="note">Règle d'or : <strong>pas d'autorisation = pas de scan.</strong></div>
+    </section>
+
+    <!-- CHAP 1 -->
+    <section id="ch1" class="lesson">
+      <div class="chap">CHAPITRE 1</div>
+      <h2>Installer Kali &amp; monter son labo</h2>
+      <p class="goal">🎯 Objectif : avoir une machine d'attaque + une cible légale à côté.</p>
+      <p><strong>Quoi faire :</strong> installe Kali dans une VM (VirtualBox/VMware), puis une cible
+      volontairement vulnérable, le tout dans un réseau « hôte uniquement » (isolé d'Internet).</p>
+      <ul>
+        <li><strong>Attaquant :</strong> Kali Linux (<a href="index.html">voir l'aide-mémoire → Installer Kali</a>).</li>
+        <li><strong>Cible :</strong> Metasploitable 2, ou une room TryHackMe/HackTheBox.</li>
+      </ul>
+      <p>Mets à jour Kali avant de commencer :</p>
+      <div class="cmd-code"><code>sudo apt update &amp;&amp; sudo apt full-upgrade -y</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 2 -->
+    <section id="ch2" class="lesson">
+      <div class="chap">CHAPITRE 2</div>
+      <h2>Survivre dans le terminal Linux</h2>
+      <p class="goal">🎯 Objectif : se déplacer et lire des fichiers sans paniquer.</p>
+      <p><strong>Quoi faire :</strong> apprends ces 8 commandes, elles couvrent 90 % du quotidien.</p>
+      <table class="anatomy-table">
+        <tr><td><code>pwd</code></td><td>Où suis-je ? (dossier courant)</td></tr>
+        <tr><td><code>ls -la</code></td><td>Lister les fichiers (même cachés)</td></tr>
+        <tr><td><code>cd dossier</code></td><td>Entrer dans un dossier</td></tr>
+        <tr><td><code>cat fichier</code></td><td>Afficher un fichier</td></tr>
+        <tr><td><code>nano fichier</code></td><td>Éditer un fichier</td></tr>
+        <tr><td><code>man outil</code></td><td>Lire le manuel d'un outil</td></tr>
+        <tr><td><code>sudo &lt;cmd&gt;</code></td><td>Exécuter en administrateur</td></tr>
+        <tr><td><code>ip a</code></td><td>Voir ses adresses réseau</td></tr>
+      </table>
+      <p class="tip">💡 Bloqué ? <code>&lt;outil&gt; --help</code> affiche l'aide de presque tous les outils.</p>
+    </section>
+
+    <!-- CHAP 3 -->
+    <section id="ch3" class="lesson">
+      <div class="chap">CHAPITRE 3</div>
+      <h2>Lire une commande &amp; remplacer <code>(cible)</code></h2>
+      <p class="goal">🎯 Objectif : décortiquer n'importe quelle commande du mémo.</p>
+      <div class="anatomy"><code>sudo nmap -sV -p- 192.168.1.10</code></div>
+      <table class="anatomy-table">
+        <tr><td><code>sudo</code></td><td>Droits administrateur</td></tr>
+        <tr><td><code>nmap</code></td><td>Le programme</td></tr>
+        <tr><td><code>-sV</code> <code>-p-</code></td><td>Les options (comment il travaille)</td></tr>
+        <tr><td><code>192.168.1.10</code></td><td>La <strong>cible</strong> — c'est ici qu'on écrit quoi viser</td></tr>
+      </table>
+      <p>Quand tu vois <code>&lt;cible&gt;</code> ou <code>(cible)</code>, tu <strong>enlèves</strong> les
+      parenthèses et tu écris la vraie valeur :</p>
+      <table class="anatomy-table">
+        <tr><th>Tu veux viser…</th><th>Tu écris…</th></tr>
+        <tr><td>une machine</td><td><code>192.168.1.10</code></td></tr>
+        <tr><td>un site (labo)</td><td><code>http://192.168.1.10</code></td></tr>
+        <tr><td>tout un réseau</td><td><code>192.168.1.0/24</code></td></tr>
+      </table>
+      <div class="before-after">
+        <div><span class="ba-label">Modèle</span><code>nmap -sV -sC &lt;cible&gt;</code></div>
+        <div><span class="ba-label">Toi, tu tapes</span><code class="ok">nmap -sV -sC 192.168.1.10</code></div>
+      </div>
+    </section>
+
+    <!-- CHAP 4 -->
+    <section id="ch4" class="lesson">
+      <div class="chap">CHAPITRE 4</div>
+      <h2>Reconnaissance passive (OSINT)</h2>
+      <p class="goal">🎯 Objectif : récolter des infos <em>sans toucher</em> directement la cible.</p>
+      <p><strong>Quoi faire :</strong> sur un domaine autorisé, collecte noms, sous-domaines, emails.
+      Remplace <code>exemple.com</code> par <strong>ton</strong> domaine de test.</p>
+      <div class="cmd-code"><code>whois exemple.com</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>dig exemple.com ANY +noall +answer</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>theHarvester -d exemple.com -b all</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>sublist3r -d exemple.com</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 5 -->
+    <section id="ch5" class="lesson step">
+      <div class="step-badge">ÉTAPE 1</div>
+      <div class="chap">CHAPITRE 5</div>
+      <h2>Découverte réseau : scanner les alentours</h2>
+      <p class="goal">🎯 Objectif : lister <strong>toutes les machines allumées</strong> autour de toi.</p>
+      <p><strong>Quoi faire :</strong> d'abord trouver ton réseau, puis le balayer entièrement.</p>
+      <h3>1) Trouver ton réseau</h3>
+      <div class="cmd-code"><code>ip a</code><button class="copy-btn">Copier</button></div>
+      <p>Si tu vois <code>inet 192.168.1.23/24</code>, ton réseau est <code>192.168.1.0/24</code>.</p>
+      <h3>2) Balayer tout le réseau (ping sweep)</h3>
+      <div class="cmd-code"><code>sudo nmap -sn 192.168.1.0/24</code><button class="copy-btn">Copier</button></div>
+      <p>👉 Mets <strong>ton</strong> réseau à la place. Résultat = la liste des IP vivantes.</p>
+      <h3>3) Variante ARP (LAN)</h3>
+      <div class="cmd-code"><code>sudo netdiscover -r 192.168.1.0/24</code><button class="copy-btn">Copier</button></div>
+      <div class="note">Fin de l'étape : tu as une <strong>liste d'IP</strong>. Choisis-en une pour la suite.</div>
+    </section>
+
+    <!-- CHAP 6 -->
+    <section id="ch6" class="lesson step">
+      <div class="step-badge">ÉTAPE 2</div>
+      <div class="chap">CHAPITRE 6</div>
+      <h2>Scanner les ports &amp; services</h2>
+      <p class="goal">🎯 Objectif : voir quelles « portes » une machine laisse ouvertes.</p>
+      <p><strong>Quoi faire :</strong> remplace <code>192.168.1.10</code> par une IP de ta liste.</p>
+      <div class="cmd-code"><code>sudo nmap -sV -sC 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>sudo nmap -p- -T4 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>sudo nmap -A 192.168.1.10 -oA scan-cible</code><button class="copy-btn">Copier</button></div>
+      <p>Lis chaque ligne <code>open</code> : <code>22</code>=SSH, <code>80/443</code>=web,
+      <code>445</code>=partage Windows, <code>21</code>=FTP, <code>3306</code>=MySQL…</p>
+    </section>
+
+    <!-- CHAP 7 -->
+    <section id="ch7" class="lesson">
+      <div class="chap">CHAPITRE 7</div>
+      <h2>Énumérer les services</h2>
+      <p class="goal">🎯 Objectif : creuser chaque port ouvert trouvé au chapitre 6.</p>
+      <p><strong>Quoi faire :</strong> selon le port, lance l'outil adapté (remplace l'IP).</p>
+      <h3>Partages Windows/SMB (port 445)</h3>
+      <div class="cmd-code"><code>enum4linux-ng -A 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>smbclient -L //192.168.1.10/ -N</code><button class="copy-btn">Copier</button></div>
+      <h3>Web (port 80/443)</h3>
+      <div class="cmd-code"><code>whatweb http://192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>gobuster dir -u http://192.168.1.10 -w /usr/share/wordlists/dirb/common.txt</code><button class="copy-btn">Copier</button></div>
+      <h3>FTP (port 21)</h3>
+      <div class="cmd-code"><code>ftp 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 8 -->
+    <section id="ch8" class="lesson">
+      <div class="chap">CHAPITRE 8</div>
+      <h2>Analyse de vulnérabilités</h2>
+      <p class="goal">🎯 Objectif : relier un service + sa version à une faille connue.</p>
+      <div class="cmd-code"><code>sudo nmap --script vuln 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <p>Note la version d'un service (ex. « vsftpd 2.3.4 ») puis cherche un exploit :</p>
+      <div class="cmd-code"><code>searchsploit vsftpd 2.3.4</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>nuclei -u http://192.168.1.10</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 9 -->
+    <section id="ch9" class="lesson">
+      <div class="chap">CHAPITRE 9</div>
+      <h2>Attaques sur les mots de passe</h2>
+      <p class="goal">🎯 Objectif : tester des identifiants faibles (sur TES comptes de labo).</p>
+      <div class="cmd-code"><code>hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <p>Casser un hash récupéré :</p>
+      <div class="cmd-code"><code>john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 10 -->
+    <section id="ch10" class="lesson">
+      <div class="chap">CHAPITRE 10</div>
+      <h2>Exploitation (Metasploit)</h2>
+      <p class="goal">🎯 Objectif : utiliser une faille trouvée pour obtenir un accès (en labo).</p>
+      <p><strong>Quoi faire :</strong> lance Metasploit, choisis un module, règle la cible (RHOSTS).</p>
+      <div class="cmd-code"><code>msfconsole</code><button class="copy-btn">Copier</button></div>
+      <p>Dans msfconsole, le remplacement de <code>(cible)</code> se fait avec <code>set RHOSTS</code> :</p>
+      <div class="cmd-code"><code>search vsftpd</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>use exploit/unix/ftp/vsftpd_234_backdoor</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>set RHOSTS 192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>run</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 11 -->
+    <section id="ch11" class="lesson">
+      <div class="chap">CHAPITRE 11</div>
+      <h2>Post-exploitation &amp; élévation de privilèges</h2>
+      <p class="goal">🎯 Objectif : une fois « dedans », devenir administrateur/root.</p>
+      <p><strong>Quoi faire :</strong> énumère la machine pour trouver un chemin vers root.</p>
+      <div class="cmd-code"><code>id</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>sudo -l</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>find / -perm -4000 -type f 2>/dev/null</code><button class="copy-btn">Copier</button></div>
+      <p>Script d'énumération automatique :</p>
+      <div class="cmd-code"><code>./linpeas.sh</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 12 -->
+    <section id="ch12" class="lesson">
+      <div class="chap">CHAPITRE 12</div>
+      <h2>Attaquer une application web</h2>
+      <p class="goal">🎯 Objectif : trouver des pages cachées et tester les injections.</p>
+      <div class="cmd-code"><code>gobuster dir -u http://192.168.1.10 -w /usr/share/wordlists/dirb/common.txt</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>nikto -h http://192.168.1.10</code><button class="copy-btn">Copier</button></div>
+      <p>Tester une injection SQL (sur un paramètre de ton appli de test) :</p>
+      <div class="cmd-code"><code>sqlmap -u "http://192.168.1.10/page?id=1" --batch --dbs</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 13 -->
+    <section id="ch13" class="lesson">
+      <div class="chap">CHAPITRE 13</div>
+      <h2>Audit Wi-Fi (ton propre réseau)</h2>
+      <p class="goal">🎯 Objectif : comprendre comment on audite un Wi-Fi que tu possèdes.</p>
+      <div class="cmd-code"><code>sudo airmon-ng start wlan0</code><button class="copy-btn">Copier</button></div>
+      <div class="cmd-code"><code>sudo airodump-ng wlan0mon</code><button class="copy-btn">Copier</button></div>
+      <p>Remplace <code>&lt;BSSID&gt;</code> par celui de <strong>ton</strong> point d'accès :</p>
+      <div class="cmd-code"><code>sudo airodump-ng -c 6 --bssid AA:BB:CC:DD:EE:FF -w capture wlan0mon</code><button class="copy-btn">Copier</button></div>
+    </section>
+
+    <!-- CHAP 14 -->
+    <section id="ch14" class="lesson">
+      <div class="chap">CHAPITRE 14</div>
+      <h2>Nettoyage &amp; rapport</h2>
+      <p class="goal">🎯 Objectif : rendre un travail pro — c'est ça, le vrai métier.</p>
+      <p><strong>Quoi faire :</strong> pour chaque faille, note dans un rapport :</p>
+      <ul class="check">
+        <li>🔎 <strong>Ce que tu as trouvé</strong> (service, version, faille).</li>
+        <li>🧪 <strong>Comment le reproduire</strong> (la commande exacte).</li>
+        <li>⚠️ <strong>L'impact</strong> (ce qu'un attaquant pourrait faire).</li>
+        <li>🛠️ <strong>La correction</strong> (mise à jour, config, mot de passe fort).</li>
+      </ul>
+      <div class="note">Un bon pentester ne « casse » pas : il <strong>documente et aide à réparer</strong>.</div>
+    </section>
+
+    <!-- CHAP 15 -->
+    <section id="ch15" class="lesson">
+      <div class="chap">CHAPITRE 15</div>
+      <h2>Progresser ensuite</h2>
+      <p class="goal">🎯 Objectif : t'entraîner légalement et continuer à apprendre.</p>
+      <ul>
+        <li><strong>TryHackMe</strong> — parcours guidés pour débutants.</li>
+        <li><strong>Hack The Box</strong> — machines à pirater (labos légaux).</li>
+        <li><strong>VulnHub</strong> — VM vulnérables à télécharger.</li>
+        <li><strong>OWASP Juice Shop</strong> — pour le hacking web.</li>
+      </ul>
+      <p>Et garde l'<a href="index.html">📋 aide-mémoire</a> ouvert : toutes les commandes du cours
+      y sont, classées par catégorie et prêtes à copier.</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Cours éducatif de hacking éthique — pratique uniquement en labo ou avec autorisation écrite.</p>
+      <p class="muted">En cas de doute : <code>&lt;outil&gt; --help</code> ou <code>man &lt;outil&gt;</code>.</p>
+    </div>
+  </footer>
+
+  <script src="assets/course.js"></script>
+</body>
+</html>
