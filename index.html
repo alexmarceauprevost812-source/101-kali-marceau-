@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Kali Linux 101 — cours pour débutants. Thème noir, écriture blanche.">
+  <title>TI-LEX • Kali Linux 101</title>
+  <style>
+    :root{color-scheme:dark;--bg:#050505;--panel:#0b0b0b;--panel2:#111;--text:#fff;--muted:#d2d2d2;--border:#3d3d3d;--focus:#fff}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:2rem}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}
+    a{color:var(--text);text-underline-offset:3px}
+    a:hover{text-decoration-thickness:2px}
+    button{font:inherit;cursor:pointer}
+    :focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+    .skip{position:absolute;top:-100px;left:1rem;background:#fff;color:#000;padding:.5rem 1rem;z-index:30}
+    .skip:focus{top:1rem}
+    .shell{display:grid;grid-template-columns:minmax(225px,275px) minmax(0,1fr);min-height:100vh}
+    .sidebar{background:#090909;border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow:auto;padding:2rem 1.25rem}
+    .brand{display:flex;align-items:center;gap:.75rem;font-size:1rem;letter-spacing:.06em;font-weight:800}
+    .brand-icon{border:1px solid white;border-radius:12px;padding:.4rem .6rem;font-size:1.3rem}
+    .subtitle{font-size:.83rem;color:var(--muted);margin:.6rem 0 1.75rem}
+    .sidebar nav{display:grid;gap:.3rem}
+    .sidebar nav a{display:block;padding:.65rem .75rem;border:1px solid transparent;border-radius:8px;text-decoration:none;font-size:.91rem}
+    .sidebar nav a:hover,.sidebar nav a.active{background:#202020;border-color:#777}
+    .sidebar .small{border-top:1px solid var(--border);margin-top:2rem;padding-top:1rem;font-size:.82rem;color:var(--muted)}
+    main{max-width:1040px;width:100%;margin:0 auto;padding:2.8rem clamp(1.1rem,5vw,5rem) 7rem}
+    .eyebrow{text-transform:uppercase;letter-spacing:.17em;font-weight:750;font-size:.75rem}
+    h1,h2,h3{line-height:1.23;letter-spacing:-.025em}
+    h1{font-size:clamp(2.45rem,7vw,5.2rem);margin:.6rem 0 1.4rem}
+    h2{font-size:clamp(1.55rem,3.5vw,2.15rem);margin:0 0 1rem}
+    h3{font-size:1.1rem;margin-top:1.5rem}
+    .lead{font-size:1.18rem;color:var(--muted);max-width:65ch}
+    .hero{padding-bottom:2.3rem;border-bottom:1px solid var(--border)}
+    .tagline{display:flex;flex-wrap:wrap;gap:.6rem;margin:2rem 0}
+    .tag{border:1px solid #888;border-radius:999px;padding:.28rem .8rem;font-size:.82rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:#fff;color:#050505;border:1px solid #fff;border-radius:8px;padding:.7rem 1rem;font-weight:750;text-decoration:none}
+    .btn:hover{background:#dadada}
+    .btn.secondary{background:#050505;color:#fff}
+    .btn.secondary:hover{background:#222}
+    .chapter{padding:3.25rem 0;border-bottom:1px solid var(--border)}
+    .number{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:.5rem}
+    p,li{max-width:75ch}
+    .notice{border:1px solid #858585;border-left:4px solid #fff;background:#111;padding:1rem 1.2rem;border-radius:4px;margin:1.6rem 0}
+    .notice p{margin:.2rem 0}
+    .code-wrap{border:1px solid #555;border-radius:10px;overflow:hidden;margin:1.15rem 0 1.45rem;background:#101010}
+    .code-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-bottom:1px solid #4a4a4a;background:#1b1b1b;padding:.42rem .8rem;font-size:.83rem}
+    .copy{color:#fff;background:#222;border:1px solid #777;border-radius:6px;padding:.2rem .7rem}
+    .copy:hover{background:#333}
+    pre{margin:0;overflow-x:auto;padding:1rem 1.15rem;color:#fff;font: .93rem/1.65 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+    code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#242424;color:white;padding:.08rem .25rem;border-radius:4px}
+    pre code{background:none;padding:0}
+    .exercise{border:1px solid #555;background:#0c0c0c;padding:1.1rem 1.2rem;border-radius:8px;margin-top:1.4rem}
+    .exercise strong{display:block;margin-bottom:.45rem}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;margin-top:1.6rem}
+    .card{border:1px solid #555;border-radius:10px;padding:1rem;background:#101010}
+    .card strong{display:block;font-size:1.7rem}
+    .card span{color:var(--muted);font-size:.87rem}
+    .toplink{display:inline-block;margin-top:1.3rem;font-size:.84rem}
+    footer{padding-top:2rem;color:var(--muted);font-size:.9rem}
+    .menu-toggle{display:none}
+    @media(max-width:760px){
+      .shell{display:block}
+      .sidebar{position:relative;height:auto;overflow:visible;border-right:0;border-bottom:1px solid var(--border);padding:1rem}
+      .sidebar .subtitle,.sidebar .small{display:none}
+      .sidebar nav{display:none;margin-top:1rem}
+      .sidebar nav.open{display:grid}
+      .sidebar-top{display:flex;align-items:center;justify-content:space-between}
+      .menu-toggle{display:block;background:#151515;color:#fff;border:1px solid #888;border-radius:8px;padding:.35rem .7rem}
+      main{padding-top:1.9rem}
+      .chapter{padding:2.4rem 0}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+<a class="skip" href="#contenu">Aller au cours</a>
+<div class="shell">
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">⌘</span> TI-LEX · 101</div>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation">☰ Chapitres</button>
+  </div>
+  <p class="subtitle">Kali Linux • Formation débutant</p>
+  <nav id="navigation" aria-label="Chapitres du cours">
+    <a href="#accueil">Accueil</a>
+    <a href="#chapitre-1">01 · Découvrir Kali</a>
+    <a href="#chapitre-2">02 · Terminal Linux</a>
+    <a href="#chapitre-3">03 · Permissions</a>
+    <a href="#chapitre-4">04 · Mise à jour</a>
+    <a href="#chapitre-5">05 · Réseau</a>
+    <a href="#chapitre-6">06 · Interfaces</a>
+    <a href="#chapitre-7">07 · Nmap local</a>
+    <a href="#chapitre-8">08 · Python</a>
+    <a href="#chapitre-9">09 · Journaux</a>
+    <a href="#chapitre-10">10 · Rapport final</a>
+  </nav>
+  <p class="small">Fond noir · Écriture blanche<br>Exercices sur appareils personnels uniquement.</p>
+</aside>
+<main id="contenu">
+<header class="hero" id="accueil">
+  <div class="eyebrow">Guide pratique · Kali Linux</div>
+  <h1>Hacker 101.<br>Les bases, étape par étape.</h1>
+  <p class="lead">Apprends le terminal Linux, les réseaux, Python et les premiers réflexes de cybersécurité défensive. Chaque chapitre contient un exercice simple sur ton propre ordinateur.</p>
+  <div class="tagline"><span class="tag">10 chapitres</span><span class="tag">Débutant</span><span class="tag">Français</span><span class="tag">Laboratoire local</span></div>
+  <a class="btn" href="#chapitre-1">Commencer le cours →</a>
+  <a class="btn secondary" href="COURS_KALI_101.md">Lire la version Markdown</a>
+  <div class="cards"><div class="card"><strong>01</strong><span>Comprendre Linux</span></div><div class="card"><strong>02</strong><span>Observer son réseau</span></div><div class="card"><strong>03</strong><span>Écrire du Python</span></div></div>
+  <div class="notice"><p><strong>Règle essentielle :</strong> pratique uniquement sur tes propres appareils et dans des environnements autorisés. Les commandes de laboratoire ci-dessous ciblent <code>127.0.0.1</code>, c'est-à-dire ton ordinateur.</p></div>
+</header>
+<section class="chapter" id="chapitre-1">
+  <div class="number">Chapitre 01 / 10</div><h2>Découvrir Kali Linux</h2>
+  <p>Kali Linux est une distribution Linux conçue pour l'apprentissage de la sécurité et les audits autorisés. La première compétence est de comprendre ce que le terminal affiche.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Identification</span><button type="button" class="copy">Copier</button></div><pre><code>whoami
+pwd
+cat /etc/os-release
+uname -r
+date</code></pre></div>
+  <p><code>whoami</code> affiche ton utilisateur, <code>pwd</code> ton dossier, <code>uname -r</code> le noyau et <code>date</code> l'heure.</p>
+  <div class="exercise"><strong>✎ Exercice</strong> Trouve le nom de ta distribution, ton utilisateur et ton dossier personnel.</div>
+</section>
+<section class="chapter" id="chapitre-2">
+  <div class="number">Chapitre 02 / 10</div><h2>Apprendre le terminal</h2>
+  <p>Crée ton premier dossier de travail, affiche son contenu et copie un fichier.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Fichiers</span><button type="button" class="copy">Copier</button></div><pre><code>cd ~
+mkdir -p kali101/chapitre2
+cd kali101/chapitre2
+printf 'Bonjour Kali 101\n' > note.txt
+ls -la
+cat note.txt
+cp note.txt copie.txt</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Ajoute une ligne avec <code>printf 'Je progresse\n' >> note.txt</code> puis relis le fichier.</div>
+</section>
+<section class="chapter" id="chapitre-3">
+  <div class="number">Chapitre 03 / 10</div><h2>Permissions, processus et stockage</h2>
+  <p>Les permissions <code>r</code>, <code>w</code>, <code>x</code> signifient lire, écrire et exécuter. Observe celles d'un fichier qui t'appartient.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Observation</span><button type="button" class="copy">Copier</button></div><pre><code>ls -l ~/kali101/chapitre2/note.txt
+stat ~/kali101/chapitre2/note.txt
+ps -u "$USER"
+df -h
+free -h</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Repère le propriétaire de <code>note.txt</code> et sa taille. Ne touche pas aux permissions des fichiers système.</div>
+</section>
+<section class="chapter" id="chapitre-4">
+  <div class="number">Chapitre 04 / 10</div><h2>Mettre Kali à jour</h2>
+  <p>Comprends les changements avant de lancer une mise à niveau. Sauvegarde les données importantes.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Vérification</span><button type="button" class="copy">Copier</button></div><pre><code>sudo apt update
+apt list --upgradable</code></pre></div>
+  <p>Pour appliquer les mises à niveau après avoir lu les modifications proposées :</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Mise à niveau</span><button type="button" class="copy">Copier</button></div><pre><code>sudo apt full-upgrade</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Explique la différence entre récupérer la liste des paquets et installer leurs nouvelles versions.</div>
+</section>
+<section class="chapter" id="chapitre-5">
+  <div class="number">Chapitre 05 / 10</div><h2>Les bases du réseau</h2>
+  <p>Une <strong>adresse IP</strong> identifie un appareil sur un réseau, un <strong>port</strong> identifie un service, et <strong>DNS</strong> traduit les noms de domaine. <code>127.0.0.1</code> est l'adresse de boucle locale de ton ordinateur.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Boucle locale</span><button type="button" class="copy">Copier</button></div><pre><code>ping -c 3 127.0.0.1</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Avec tes mots, quelle est la différence entre une adresse IP et un port ?</div>
+</section>
+<section class="chapter" id="chapitre-6">
+  <div class="number">Chapitre 06 / 10</div><h2>Observer ses interfaces réseau</h2>
+  <p>Ces commandes affichent les interfaces, routes et services en écoute <strong>sur ton ordinateur</strong>.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Réseau local</span><button type="button" class="copy">Copier</button></div><pre><code>ip -brief address
+ip route
+nmcli device status
+ss -ltn</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Repère ton interface Wi-Fi ou Ethernet. Compare-la avec <code>lo</code>, la boucle locale.</div>
+</section>
+<section class="chapter" id="chapitre-7">
+  <div class="number">Chapitre 07 / 10</div><h2>Premier exercice Nmap en local</h2>
+  <p>Démarre un petit serveur sur ton PC. Dans un <strong>premier terminal</strong> :</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal 1 • Serveur de laboratoire</span><button type="button" class="copy">Copier</button></div><pre><code>mkdir -p ~/kali101/site
+printf '&lt;h1&gt;Laboratoire Kali 101&lt;/h1&gt;\n' > ~/kali101/site/index.html
+cd ~/kali101/site
+python3 -m http.server 8000 --bind 127.0.0.1</code></pre></div>
+  <p>Puis, dans un <strong>deuxième terminal</strong> :</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal 2 • Vérification locale</span><button type="button" class="copy">Copier</button></div><pre><code>curl -I http://127.0.0.1:8000
+nmap -p 8000 127.0.0.1</code></pre></div>
+  <p>Si Nmap n'est pas installé : <code>sudo apt update</code> puis <code>sudo apt install nmap</code>. Un port <code>open</code> signifie qu'un service répond; cela ne prouve pas l'existence d'une faille.</p>
+  <div class="exercise"><strong>✎ Exercice</strong> Arrête le serveur avec <code>Ctrl+C</code>, puis compare le résultat de Nmap sur <code>127.0.0.1</code>.</div>
+</section>
+<section class="chapter" id="chapitre-8">
+  <div class="number">Chapitre 08 / 10</div><h2>Python : vérifier un fichier</h2>
+  <p>Écris ce programme dans <code>~/kali101/sha256.py</code>. Il calcule une empreinte SHA-256 de ton fichier de cours.</p>
+  <div class="code-wrap"><div class="code-header"><span>Python 3 • sha256.py</span><button type="button" class="copy">Copier</button></div><pre><code>from pathlib import Path
+import hashlib
+
+fichier = Path.home() / "kali101" / "chapitre2" / "note.txt"
+if fichier.is_file():
+    print(hashlib.sha256(fichier.read_bytes()).hexdigest())
+else:
+    print("Fichier introuvable :", fichier)</code></pre></div>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • Exécution</span><button type="button" class="copy">Copier</button></div><pre><code>python3 ~/kali101/sha256.py</code></pre></div>
+  <div class="exercise"><strong>✎ Exercice</strong> Modifie <code>note.txt</code>, recalcule l'empreinte et compare les résultats.</div>
+</section>
+<section class="chapter" id="chapitre-9">
+  <div class="number">Chapitre 09 / 10</div><h2>Journaux et sécurité défensive</h2>
+  <p>Les journaux permettent de mieux comprendre les événements d'un système.</p>
+  <div class="code-wrap"><div class="code-header"><span>Terminal • État du système</span><button type="button" class="copy">Copier</button></div><pre><code>journalctl -b -n 20 --no-pager
+systemctl --failed</code></pre></div>
+  <p>Protège tes comptes avec des mots de passe uniques, l'authentification multifactorielle, les mises à jour et des sauvegardes. Évite de publier tes journaux complets, qui peuvent contenir des données privées.</p>
+  <div class="exercise"><strong>✎ Exercice</strong> Choisis une ligne d'un journal et explique son sens sans divulguer de données personnelles.</div>
+</section>
+<section class="chapter" id="chapitre-10">
+  <div class="number">Chapitre 10 / 10</div><h2>Rédiger ton premier rapport</h2>
+  <p>Crée un document <code>~/kali101/RAPPORT.md</code> avec ce modèle :</p>
+  <div class="code-wrap"><div class="code-header"><span>Markdown • Rapport final</span><button type="button" class="copy">Copier</button></div><pre><code># Rapport Kali Linux 101
+
+Date :
+Périmètre autorisé : mon PC, 127.0.0.1
+Distribution :
+Version du noyau :
+Interface locale :
+Port testé : 8000
+Service de laboratoire :
+Mises à jour vérifiées :
+Journaux consultés :
+Empreinte SHA-256 calculée :
+Ce que j'ai appris :
+</code></pre></div>
+  <div class="exercise"><strong>✎ Défi final</strong> Tu peux expliquer la boucle locale, lire les informations de ton système, démarrer et arrêter un service local, puis rédiger un rapport. Bravo !</div>
+</section>
+<footer>
+  <p><strong>Références :</strong> <a href="https://www.kali.org/docs/" rel="noopener noreferrer">Documentation Kali</a> · <a href="https://nmap.org/book/" rel="noopener noreferrer">Guide officiel Nmap</a></p>
+  <p>TI-LEX • Kali Linux 101 — Interface fond noir et texte blanc. Exercices éducatifs et autorisés uniquement.</p>
+  <a href="#accueil">↑ Retour en haut</a>
+</footer>
+</main></div>
+<script>
+  const toggle=document.querySelector(".menu-toggle");
+  const nav=document.getElementById("navigation");
+  toggle.addEventListener("click",()=>{
+    const open=nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded",String(open));
+  });
+  nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{
+    nav.classList.remove("open");
+    toggle.setAttribute("aria-expanded","false");
+  }));
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",async()=>{
+    const code=b.closest(".code-wrap").querySelector("code").textContent;
+    try{await navigator.clipboard.writeText(code);b.textContent="Copié ✓";}
+    catch{b.textContent="Sélectionne le code";}
+    setTimeout(()=>b.textContent="Copier",1800);
+  }));
+  if("IntersectionObserver" in window){
+    const links=[...nav.querySelectorAll("a")];
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          links.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+e.target.id));
+        }
+      });
+    },{rootMargin:"-12% 0px -70% 0px"});
+    document.querySelectorAll("header[id],section[id]").forEach(s=>obs.observe(s));
+  }
+</script>
+</body>
+</html>
